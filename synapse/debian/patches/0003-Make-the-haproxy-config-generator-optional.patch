@@ -1,0 +1,35 @@
+From: Neil Williams <neil@reddit.com>
+Date: Fri, 20 May 2016 20:31:47 -0700
+Subject: Make the haproxy config generator optional
+
+If we're using the file_output generator, we may not want to deal with
+haproxy at all.
+---
+ lib/synapse.rb | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/lib/synapse.rb b/lib/synapse.rb
+index c695bfb..985ed2b 100644
+--- a/lib/synapse.rb
++++ b/lib/synapse.rb
+@@ -25,6 +25,20 @@ module Synapse
+       raise "specify a list of services to connect in the config" unless opts.has_key?('services')
+       @service_watchers = create_service_watchers(opts['services'])
+ 
++      # create objects that need to be notified of service changes
++      @config_generators = []
++
++      # possibly create an haproxy config generator
++      if opts.has_key?('haproxy')
++        @config_generators << Haproxy.new(opts['haproxy'])
++      end
++
++      # possibly create a file manifestation for services that do not
++      # want to communicate via haproxy, e.g. cassandra
++      if opts.has_key?('file_output')
++        @config_generators << FileOutput.new(opts['file_output'])
++      end
++
+       # configuration is initially enabled to configure on first loop
+       @config_updated = true
+ 

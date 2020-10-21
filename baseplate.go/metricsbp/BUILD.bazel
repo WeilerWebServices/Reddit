@@ -1,0 +1,57 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "baseplate_hooks.go",
+        "config.go",
+        "doc.go",
+        "log.go",
+        "nil_check.go",
+        "runtime_stats.go",
+        "sampled.go",
+        "statsd.go",
+        "tags.go",
+        "timer.go",
+    ],
+    importpath = "github.com/reddit/baseplate.go/metricsbp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//log:go_default_library",
+        "//randbp:go_default_library",
+        "//tracing:go_default_library",
+        "@com_github_go_kit_kit//metrics:go_default_library",
+        "@com_github_go_kit_kit//metrics/discard:go_default_library",
+        "@com_github_go_kit_kit//metrics/influxstatsd:go_default_library",
+        "@com_github_go_kit_kit//util/conn:go_default_library",
+    ],
+)
+
+go_test(
+    name = "go_default_test",
+    size = "small",
+    srcs = [
+        "baseplate_hooks_internal_test.go",
+        "baseplate_hooks_test.go",
+        "config_test.go",
+        "example_baseplate_hooks_test.go",
+        "example_nil_check_test.go",
+        "example_timer_test.go",
+        "log_test.go",
+        "nil_check_test.go",
+        "sampled_test.go",
+        "statsd_test.go",
+        "tags_test.go",
+        "timer_test.go",
+    ],
+    embed = [":go_default_library"],
+    # This test is marked as flaky as sometimes the running environment in drone
+    # is just too slow for the context switch in the sleep in TestTimer.
+    flaky = True,
+    deps = [
+        "//tracing:go_default_library",
+        "@com_github_go_kit_kit//metrics:go_default_library",
+        "@com_github_opentracing_opentracing_go//:go_default_library",
+        "@in_gopkg_yaml_v2//:go_default_library",
+    ],
+)

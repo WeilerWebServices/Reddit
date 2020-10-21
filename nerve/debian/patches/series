@@ -1,0 +1,3 @@
+0001-Remove-etcd-support.patch
+0002-Add-shell-checker.patch
+0003-Remove-redis-service-watcher-support.patch

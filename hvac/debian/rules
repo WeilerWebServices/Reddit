@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+
+export PYBUILD_NAME=hvac
+
+# the integration tests expect a full vault install which we don't have in
+# launchpad!
+export PYBUILD_DISABLE=test
+
+%:
+	dh $@ --with python2,python3 --buildsystem=pybuild

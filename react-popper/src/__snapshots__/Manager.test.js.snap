@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Manager component renders the expected markup 1`] = `
+<Manager>
+  <Provider
+    value={
+      Object {
+        "getReferenceRef": [Function],
+        "referenceNode": undefined,
+      }
+    }
+  >
+    <div
+      id="reference"
+    />
+    <div
+      id="popper"
+    />
+  </Provider>
+</Manager>
+`;

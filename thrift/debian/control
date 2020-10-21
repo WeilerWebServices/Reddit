@@ -1,0 +1,106 @@
+Source: thrift
+Section: devel
+Priority: extra
+Build-Depends:
+    automake,
+    bison,
+    debhelper (>= 9),
+    flex,
+    libboost-all-dev,
+    libevent-dev,
+    libssl-dev,
+    libtool,
+    pkgconf,
+    python3-all-dbg,
+    python3-all-dev,
+    python3-setuptools,
+    python3-six,
+    python-all-dbg,
+    python-all-dev,
+    python-setuptools,
+    python-six,
+Maintainer: Thrift Developers <dev@thrift.apache.org>
+Homepage: http://thrift.apache.org/
+Vcs-Git: https://git-wip-us.apache.org/repos/asf/thrift.git
+Vcs-Browser: https://git-wip-us.apache.org/repos/asf?p=thrift.git
+Standards-Version: 3.9.7
+X-Python-Version: >= 2.6
+X-Python3-Version: >= 3.3
+
+Package: thrift-compiler
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Compiler for Thrift definition files
+ Thrift is a software framework for scalable cross-language services
+ development. It combines a software stack with a code generation engine to
+ build services that work efficiently and seamlessly.
+ .
+ This package contains the Thrift compiler that is used for translating
+ from .thrift files (containing the definitions) to the language binding
+ for the supported languages.
+
+Package: python-thrift
+Architecture: any
+Section: python
+Depends: ${python:Depends}, ${shlibs:Depends}, ${misc:Depends}, python-six
+Recommends: python-twisted-web, python-backports.ssl-match-hostname, python-ipaddress
+Provides: ${python:Provides}
+Description: Python bindings for Thrift (Python 2)
+ Thrift is a software framework for scalable cross-language services
+ development. It combines a software stack with a code generation engine to
+ build services that work efficiently and seamlessly.
+ .
+ This package contains the Python bindings for Thrift. You will need the thrift
+ tool (in the thrift-compiler package) to compile your definition to Python
+ classes, and then the modules in this package will allow you to use those
+ classes in your programs.
+ .
+ This package installs the library for Python 2.
+
+Package: python-thrift-dbg
+Architecture: any
+Section: debug
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-thrift (= ${binary:Version}), python-all-dbg
+Provides: ${python:Provides}
+Description: Python bindings for Thrift (debug version)
+ Thrift is a software framework for scalable cross-language services
+ development. It combines a software stack with a code generation engine to
+ build services that work efficiently and seamlessly.
+ .
+ This package contains the Python bindings for Thrift with debugging symbols.
+ You will need the thrift tool (in the thrift-compiler package) to compile your
+ definition to Python classes, and then the modules in this package will allow
+ you to use those classes in your programs.
+
+Package: python3-thrift
+Architecture: any
+Section: python
+Depends: ${python3:Depends}, ${shlibs:Depends}, ${misc:Depends}, python3-six
+Recommends: python3-twisted-web
+Provides: ${python:Provides}
+Description: Python bindings for Thrift (Python 3)
+ Thrift is a software framework for scalable cross-language services
+ development. It combines a software stack with a code generation engine to
+ build services that work efficiently and seamlessly.
+ .
+ This package contains the Python bindings for Thrift. You will need the thrift
+ tool (in the thrift-compiler package) to compile your definition to Python
+ classes, and then the modules in this package will allow you to use those
+ classes in your programs.
+ .
+ This package installs the library for Python 3.
+
+Package: python3-thrift-dbg
+Architecture: any
+Section: debug
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-thrift (= ${binary:Version}), python3-all-dbg
+Provides: ${python:Provides}
+Description: Python bindings for Thrift (debug version)
+ Thrift is a software framework for scalable cross-language services
+ development. It combines a software stack with a code generation engine to
+ build services that work efficiently and seamlessly.
+ .
+ This package contains the Python bindings for Thrift with debugging symbols.
+ You will need the thrift tool (in the thrift-compiler package) to compile your
+ definition to Python classes, and then the modules in this package will allow
+ you to use those classes in your programs.

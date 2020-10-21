@@ -1,0 +1,17 @@
+---
+- test/_lib.rb
+- test/integration/_lib.rb
+- test/integration/_lib/fixtures/env_printer/env_printer.rb
+- test/integration/_lib/fixtures/exit_during_upgrade/exiting_server.rb
+- test/integration/_lib/fixtures/exit_during_upgrade/upgrade_reexec.rb
+- test/integration/_lib/fixtures/upgrade_project/upgrading_server.rb
+- test/integration/_lib/helpers.rb
+- test/integration/_lib/helpers/einhorn_helpers.rb
+- test/integration/startup.rb
+- test/integration/upgrading.rb
+- test/unit/einhorn.rb
+- test/unit/einhorn/client.rb
+- test/unit/einhorn/command.rb
+- test/unit/einhorn/command/interface.rb
+- test/unit/einhorn/event.rb
+- test/unit/einhorn/worker_pool.rb

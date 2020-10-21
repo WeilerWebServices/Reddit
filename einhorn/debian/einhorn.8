@@ -1,0 +1,81 @@
+.TH EINHORN "8" "November 2015" "einhorn 0.7.1" "System Administration Utilities"
+.SH NAME
+einhorn \- the language\-independent shared socket manager
+.SH DESCRIPTION
+.PP
+At a high level, usage looks like the following:
+.IP
+einhorn [options] program
+.PP
+Einhorn will open one or more shared sockets and run multiple copies
+of your process. You can seamlessly reload your code, dynamically
+reconfigure Einhorn, and more.
+.PP
+.TP
+\fB\-b\fR, \fB\-\-bind\fR ADDR
+Bind an address and add the corresponding FD via the environment
+.TP
+\fB\-c\fR, \fB\-\-command\-name\fR CMD_NAME
+Set the command name in ps to this value
+.TP
+\fB\-d\fR, \fB\-\-socket\-path\fR PATH
+Where to open the Einhorn command socket
+.TP
+\fB\-e\fR, \fB\-\-pidfile\fR PIDFILE
+Where to write out the Einhorn pidfile
+.TP
+\fB\-f\fR, \fB\-\-lockfile\fR LOCKFILE
+Where to store the Einhorn lockfile
+.TP
+\fB\-g\fR, \fB\-\-command\-socket\-as\-fd\fR
+Leave the command socket open as a file descriptor, passed in the EINHORN_SOCK_FD environment variable. This allows your worker processes to ACK without needing to know where on the filesystem the command socket lives.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display this message
+.TP
+\fB\-k\fR, \fB\-\-kill\-children\-on\-exit\fR
+If Einhorn exits unexpectedly, gracefully kill all its children
+.TP
+\fB\-l\fR, \fB\-\-backlog\fR N
+Connection backlog (assuming this is a server)
+.TP
+\fB\-m\fR, \fB\-\-ack\-mode\fR MODE
+What kinds of ACK to expect from workers. Choices: FLOAT (number of seconds until assumed alive), manual (process will speak to command socket when ready). Default is MODE=1.
+.TP
+\fB\-n\fR, \fB\-\-number\fR N
+Number of copies to spin up
+.TP
+\fB\-p\fR, \fB\-\-preload\fR PATH
+Load this code into memory, and fork but do not exec upon spawn. Must define an "einhorn_main" method
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+Make output quiet (can be reconfigured on the fly)
+.TP
+\fB\-s\fR, \fB\-\-seconds\fR N
+Number of seconds to wait until respawning
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Make output verbose (can be reconfigured on the fly)
+.TP
+\fB\-\-drop\-env\-var\fR VAR_NAME
+Delete VAR_NAME from the environment that is restored on upgrade
+.TP
+\fB\-\-reexec\-as\fR=\fICMDLINE\fR
+Substitute CMDLINE for \e"einhorn\e" when upgrading
+.TP
+\fB\-\-nice\fR MASTER[:WORKER=0][:RENICE_CMD=/usr/bin/renice]
+Unix nice level at which to run the einhorn processes. If not running as root, make sure to ulimit \fB\-e\fR as appopriate.
+.TP
+\fB\-\-with\-state\-fd\fR STATE
+[Internal option] With file descriptor containing state
+.TP
+\fB\-\-upgrade\-check\fR
+[Internal option] Check if Einhorn can exec itself and exit with status 0 before loading code
+.TP
+\fB\-t\fR, \fB\-\-signal\-timeout\fR=\fIT\fR
+If children do not react to signals after T seconds, escalate to SIGKILL
+.TP
+\fB\-\-version\fR
+Show version
+.SH SEE ALSO
+You can communicate your running Einhorn process via \fBeinhornsh\fR.

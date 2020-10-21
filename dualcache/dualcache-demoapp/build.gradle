@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply from: '../quality/quality.gradle'
+
+android {
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        versionCode Integer.parseInt(project.VERSION_CODE)
+        versionName project.VERSION_NAME
+    }
+    productFlavors {
+        local
+        remote
+    }
+    buildTypes {
+        proguard {
+            initWith debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getProguardConfigForLibraries()
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+}
+
+dependencies {
+    localCompile project(path: ':dualcache-library')
+    localCompile project(path: ':dualcache-jsonserializer')
+
+    remoteCompile "com.vincentbrison.openlibraries.android:dualcache:${project.dualcacheVersion}"
+    remoteCompile "com.vincentbrison.openlibraries.android:dualcache-jsonserializer:${project.dualcacheVersion}"
+
+    apt "com.jakewharton:butterknife-compiler:${project.butterknifeVersion}"
+    compile "com.jakewharton:butterknife:${project.butterknifeVersion}"
+}
+
+private Object[] getProguardConfigForLibraries() {
+    // Get library specific files from here:
+    // https://github.com/krschultz/android-proguard-snippets/tree/master/libraries
+    // Adding .asList().toArray() as a workaround for this issue
+    // https://code.google.com/p/android/issues/detail?id=212882
+    fileTree(dir: 'proguard', include: ['*.pro']).asList().toArray()
+}

@@ -1,0 +1,155 @@
+From: Courtney Wang <courtney.wang@reddit.com>
+Date: Mon, 21 May 2018 17:21:45 -0700
+Subject: Remove redis service watcher support
+
+Remove an unnecessary dependency on ruby-redis
+that isn't in Trusty.
+---
+ Gemfile.lock                                 |  2 --
+ lib/nerve/service_watcher.rb                 |  1 -
+ lib/nerve/service_watcher/redis.rb           | 32 -----------------
+ nerve.gemspec                                |  1 -
+ spec/lib/nerve/service_watcher/redis_spec.rb | 51 ----------------------------
+ 5 files changed, 87 deletions(-)
+ delete mode 100644 lib/nerve/service_watcher/redis.rb
+ delete mode 100644 spec/lib/nerve/service_watcher/redis_spec.rb
+
+diff --git a/Gemfile.lock b/Gemfile.lock
+index 48d349e..56df49d 100644
+--- a/Gemfile.lock
++++ b/Gemfile.lock
+@@ -6,7 +6,6 @@ PATH
+       dogstatsd-ruby (~> 3.3.0)
+       etcd (~> 0.2.3)
+       json
+-      redis (= 3.3.5)
+       zk (~> 1.9.2)
+ 
+ GEM
+@@ -38,7 +37,6 @@ GEM
+       method_source (~> 0.8.1)
+       slop (~> 3.4)
+     rake (10.1.1)
+-    redis (3.3.5)
+     rspec (3.1.0)
+       rspec-core (~> 3.1.0)
+       rspec-expectations (~> 3.1.0)
+diff --git a/lib/nerve/service_watcher.rb b/lib/nerve/service_watcher.rb
+index 0c63537..c320698 100644
+--- a/lib/nerve/service_watcher.rb
++++ b/lib/nerve/service_watcher.rb
+@@ -1,7 +1,6 @@
+ require 'nerve/service_watcher/tcp'
+ require 'nerve/service_watcher/http'
+ require 'nerve/service_watcher/rabbitmq'
+-require 'nerve/service_watcher/redis'
+ require 'nerve/service_watcher/shell'
+ 
+ module Nerve
+diff --git a/lib/nerve/service_watcher/redis.rb b/lib/nerve/service_watcher/redis.rb
+deleted file mode 100644
+index c80a36d..0000000
+--- a/lib/nerve/service_watcher/redis.rb
++++ /dev/null
+@@ -1,32 +0,0 @@
+-require 'nerve/service_watcher/base'
+-
+-module Nerve
+-  module ServiceCheck
+-    class RedisServiceCheck < BaseServiceCheck
+-      require 'redis'
+-
+-      def initialize(opts={})
+-        super
+-        raise ArgumentError, "missing required argument 'port' in redis check" unless opts['port']
+-        @port = opts['port']
+-        @host = opts['host'] || '127.0.0.1'
+-      end
+-
+-      def check
+-        log.debug "nerve: running redis health check #{@name}"
+-        begin
+-          redis = Redis.new(host: @host, port: @port, timeout: @timeout)
+-          redis.ping
+-          # Ensure underlying host is available if proxying
+-          redis.exists('nerve-redis-service-check')
+-          return true
+-        ensure
+-          redis.close if redis
+-        end
+-      end
+-    end
+-
+-    CHECKS ||= {}
+-    CHECKS['redis'] = RedisServiceCheck
+-  end
+-end
+diff --git a/nerve.gemspec b/nerve.gemspec
+index d202ce6..f86fd4e 100644
+--- a/nerve.gemspec
++++ b/nerve.gemspec
+@@ -24,7 +24,6 @@ Gem::Specification.new do |gem|
+   gem.add_runtime_dependency "json"
+   gem.add_runtime_dependency "zk", "~> 1.9.2"
+   gem.add_runtime_dependency "bunny", "= 1.1.0"
+-  gem.add_runtime_dependency "redis", "= 3.3.5"
+   gem.add_runtime_dependency "dogstatsd-ruby", "~> 3.3.0"
+ 
+   gem.add_development_dependency "rake"
+diff --git a/spec/lib/nerve/service_watcher/redis_spec.rb b/spec/lib/nerve/service_watcher/redis_spec.rb
+deleted file mode 100644
+index f4eccab..0000000
+--- a/spec/lib/nerve/service_watcher/redis_spec.rb
++++ /dev/null
+@@ -1,51 +0,0 @@
+-require 'spec_helper'
+-require 'nerve/service_watcher/redis'
+-
+-describe Nerve::ServiceCheck::RedisServiceCheck do
+-  let(:check) {
+-    {
+-      'type' => 'redis',
+-      'timeout' => 1.0,
+-      'host' => 'localhost',
+-      'port' => 6379,
+-      'rise' => 3,
+-      'fall' => 2,
+-    }
+-  }
+-
+-  describe 'initialize' do
+-    it 'can successfully initialize' do
+-      described_class.new(check)
+-    end
+-
+-    it 'requires minimum parameters' do
+-      %w[port].each do |req|
+-        check_without = check.dup
+-        check_without.delete(req)
+-
+-        expect { described_class.new(check_without) }.to raise_error
+-      end
+-    end
+-  end
+-
+-  describe 'check' do
+-    let(:service_check) { described_class.new(check) }
+-    let(:redis) { instance_double('Redis') }
+-
+-    it 'checks the redis instance' do
+-      allow(Redis).to receive(:new).with(
+-        host: 'localhost', port: 6379, timeout: 1.0).and_return(redis)
+-      expect(redis).to receive(:ping)
+-      expect(redis).to receive(:exists).with('nerve-redis-service-check')
+-      expect(redis).to receive(:close)
+-      expect(service_check.check).to eq(true)
+-    end
+-
+-    it 'closes the redis connection on error' do
+-      allow(Redis).to receive(:new).and_return(redis)
+-      expect(redis).to receive(:ping).and_raise(Redis::TimeoutError)
+-      expect(redis).to receive(:close)
+-      expect { service_check.check }.to raise_error
+-    end
+-  end
+-end

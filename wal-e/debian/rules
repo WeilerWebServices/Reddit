@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+#
+#  Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+%:
+	dh $@ --with python2 --buildsystem pybuild
+
+override_dh_auto_build:
+	python setup.py build
+
+override_dh_auto_clean:
+	rm -rf build
+
+override_dh_auto_test:
+	PYTHONPATH=. py.test --ignore=tests/test_wabs_deleter.py --ignore=tests/test_wabs_worker.py

@@ -1,0 +1,30 @@
+# This should kick us over to the docker system
+sudo: false
+
+notifications:
+  email:
+    - slyphon@gmail.com
+    - eric@5stops.com
+
+env:
+  - SPAWN_ZOOKEEPER='true'
+
+# pull in releaseops submodule
+before_install:
+  - gem update bundler
+  - git submodule update --init --recursive
+
+rvm:
+  - 1.9.3
+  - 1.9.2
+  - 1.8.7
+  - ree
+  - 2.0.0
+  - 2.1.0
+  - 2.2.0
+
+# jruby specs are too intesive for travis
+#   - jruby-18mode
+#   - jruby-19mode
+
+bundler_args: --without development docs coverage

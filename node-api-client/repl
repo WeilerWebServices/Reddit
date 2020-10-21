@@ -1,0 +1,103 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const EventEmitter = require('events').EventEmitter;
+
+const repl = require('repl');
+const q = require('querystring');
+
+const packageInfo = require('./package.json');
+console.log(`Starting snoode v${packageInfo.version} repl`);
+console.log('Enter `help()` for information.');
+
+require('babel-polyfill');
+const optionsWithAuth = require('./build').optionsWithAuth;
+const APIOptions = Object.assign({},
+  optionsWithAuth(process.env.TOKEN),
+  { eventEmitter: new EventEmitter() }
+);
+
+const local = repl.start('$> ');
+
+function help () {
+  const help = [
+    'To try out the API, use the available instance of `api` to make requests.',
+    '  For example, try writing: `SubredditEndpoint.get(APIOptions, { id: "coffee" })`',
+    '\n',
+    'The latest API error can be accessed at `error`. Requests and responses',
+    'can be accessed at `request` and `response`.',
+    'The latest API result can be accessed at `apiResponse`',
+    '\n',
+    'Also try out using Models directly, they"re all in scope',
+    '  e.g. try typing `SubscribedSubreddits.fetch(APIOptions)` (assuming you have your token)',
+    '  property configured',
+    '  then type `apiResponse.results` and',
+    '  `apiResponse.getModelFromRecord(apiResponse.results[0])`',
+    '  if you want access to the SubredditList model that"s created in this example,',
+    '  you"ll need to append a .then(function(res) { this.res = res; })',
+    '  and then res will be available as a toplevel variable',
+  ].join('\n');
+
+  console.log(help);
+}
+
+APIOptions.eventEmitter.on('response', function printResponse (req, res) {
+  console.log(`${req.method} ${req.url} returned ${res.statusCode}`);
+  local.context.request = res;
+  local.context.response = res;
+});
+
+APIOptions.eventEmitter.on('result', function (apiResponse) {
+  local.context.apiResponse = apiResponse;
+});
+
+APIOptions.eventEmitter.on('error', function printResponse (e, req) {
+  console.log(`${req.method} ${req.url} returned error:`);
+  console.log(e.toString());
+  local.context.error = e;
+});
+
+APIOptions.eventEmitter.on('request', function printRequest (req) {
+  console.log(`Initiating ${req.method} to ${req.url}`);
+  console.log(`query/data: ${JSON.stringify(req.query, null, 2)}`);
+});
+
+local.context.findLoadMoreStub = function findLoadMoreStub(r) {
+  // r is a result
+  r.results.forEach(topLevelRecord => {
+    local.context.checkRecordForLoadMore(r, topLevelRecord);
+  });
+};
+
+local.context.checkRecordForLoadMore = function checkRecordForLoadMore(r, record) {
+  const comment = r.getModelFromRecord(record);
+  if (!comment) { return; }
+  comment.replies.forEach(replyRecord => {
+    if (replyRecord.type === 'comment') {
+      local.context.checkRecordForLoadMore(r, replyRecord);
+      return;
+    }
+
+    console.log('load more?', replyRecord);
+  });
+};
+
+function exportToContext(submoduleName) {
+  const submodule = require('./build')[submoduleName];
+  local.context[submoduleName] = submodule;
+
+  Object.keys(submodule).forEach(function(subSubmoduleName) {
+    local.context[subSubmoduleName] = submodule[subSubmoduleName];
+  });
+}
+
+local.context.APIOptions = APIOptions;
+
+exportToContext('endpoints');
+exportToContext('models');
+exportToContext('collections');
+exportToContext('APIResponses');
+exportToContext('APIResponsePaging');
+
+local.context.help = help;

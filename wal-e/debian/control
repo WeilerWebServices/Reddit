@@ -1,0 +1,32 @@
+Source: wal-e
+Maintainer: Ricky Ramirez <rram@reddit.com>
+Section: database
+Priority: optional
+Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 9),
+ dh-python,
+ lzop,
+ pv,
+ python (>= 2.7),
+ python-boto,
+ python-gevent,
+ python-keystoneclient,
+ python-pytest,
+ python-swiftclient,
+ python-virtualenv
+
+Package: wal-e
+Architecture: any
+Depends: ${misc:Depends},
+ lzop,
+ postgresql-client (>= 8.4),
+ pv,
+ python (>= 2.7),
+ python-boto,
+ python-gevent,
+ python-keystoneclient,
+ python-swiftclient
+Suggests: postgresql, pv, lzop
+Description: Simple Continuous Archiving for Postgres
+ WAL-E is a program designed to perform continuous archiving of PostgreSQL WAL
+ files and base backups.

@@ -1,0 +1,73 @@
+{
+  "name": "@r/build",
+  "version": "0.14.0",
+  "description": "A webpack based build system that can make UMD modules, (soon)peer-dependent library builds, server 'binarys', or full client ready scripts",
+  "scripts": {
+    "lint": "eslint lib"
+  },
+  "bin": {
+    "blueprints": "./bin/buildBlueprints.js",
+    "webfonts": "./bin/buildWebfonts.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reddit/node-build.git"
+  },
+  "keywords": [
+    "webpack",
+    "es6",
+    "es7",
+    "javascript",
+    "babel"
+  ],
+  "author": "schwers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/reddit/node-build/issues"
+  },
+  "dependencies": {
+    "autoprefixer": "^6.3.6",
+    "babel-core": "^6.8.0",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-lodash": "^3.1.4",
+    "babel-plugin-transform-class-properties": "^6.8.0",
+    "babel-plugin-transform-react-constant-elements": "^6.8.0",
+    "babel-plugin-transform-react-inline-elements": "^6.8.0",
+    "babel-preset-es2015-native-modules": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-2": "^6.5.0",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "2.0.0-beta.3",
+    "file-loader": "^0.9.0",
+    "fs-extra": "^0.30.0",
+    "glob": "^7.0.3",
+    "ignore-loader": "^0.1.1",
+    "json-loader": "^0.5.4",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "mocha": "^2.4.5",
+    "mocha-notifier-reporter": "^0.1.1",
+    "node-notifier": "^4.5.0",
+    "postcss-loader": "^0.9.1",
+    "rimraf": "^2.5.2",
+    "style-loader": "^0.13.1",
+    "webfonts-generator": "^0.3.5",
+    "webpack": "2.1.0-beta.22",
+    "webpack-manifest-plugin": "^1.0.1",
+    "superagent": "2.3.0",
+    "yargs": "^4.6.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.7.5",
+    "babel-eslint": "^6.0.4",
+    "eslint": "^2.8.0",
+    "eslint-plugin-babel": "^3.2.0",
+    "eslint-plugin-react": "^5.1.1",
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2"
+  },
+  "peerDependencies": {
+    "source-map-support": "~0.4.0"
+  },
+  "homepage": "https://github.com/reddit/node-build/#readme"
+}

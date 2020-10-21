@@ -1,0 +1,2 @@
+android_lite src/module.thrift
+hs src/module.thrift

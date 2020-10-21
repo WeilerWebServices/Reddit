@@ -1,0 +1,41 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix github.com/reddit/baseplate.go
+# gazelle:exclude bazel-baseplate.go
+gazelle(name = "gazelle")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "baseplate.go",
+        "doc.go",
+    ],
+    importpath = "github.com/reddit/baseplate.go",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//batchcloser:go_default_library",
+        "//edgecontext:go_default_library",
+        "//errorsbp:go_default_library",
+        "//log:go_default_library",
+        "//metricsbp:go_default_library",
+        "//runtimebp:go_default_library",
+        "//secrets:go_default_library",
+        "//tracing:go_default_library",
+        "@in_gopkg_yaml_v2//:go_default_library",
+    ],
+)
+
+go_test(
+    name = "go_default_test",
+    size = "small",
+    srcs = ["baseplate_test.go"],
+    embed = [":go_default_library"],
+    deps = [
+        "//log:go_default_library",
+        "//metricsbp:go_default_library",
+        "//runtimebp:go_default_library",
+        "//secrets:go_default_library",
+        "//tracing:go_default_library",
+    ],
+)

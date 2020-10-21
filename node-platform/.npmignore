@@ -1,0 +1,8 @@
+node_modules
+hooks
+npm-debug*
+
+.eslintrc
+.gitignore
+.npmignore
+.git

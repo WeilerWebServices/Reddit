@@ -1,0 +1,6 @@
+#!/usr/bin/make -f
+# some of the tests expect bundler and thin-attach_socket gems to be installed
+export DH_RUBY_IGNORE_TESTS=all
+
+%:
+	dh $@ --buildsystem=ruby --with ruby

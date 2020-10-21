@@ -1,0 +1,17 @@
+ext {
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.1'
+    minSdkVersion = 12
+    targetSdkVersion = 25
+
+    javaVersion = 1.7
+
+    diskLruVersion = '2.0.2'
+    jacksonDatabindVersion = '2.4.2'
+
+    androidSupportTestRunner = '0.5'
+
+    dualcacheVersion = '3.1.1'
+
+    butterknifeVersion = '8.4.0'
+}

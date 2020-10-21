@@ -1,0 +1,22 @@
+.TH EINHORNSH: "1" "November 2015" "einhornsh: version unknown" "User Commands"
+.SH NAME
+einhornsh - the Einhorn shell
+.SH SYNOPSIS
+.B einhornsh
+[\fIoptions\fR] [\fIcmd_name\fR]
+.SH DESCRIPTION
+Pass the cmd_name of the Einhorn master you are connecting to either
+as a positional argument or using `\-c`. If you're running your Einhorn
+with a `\-d`, provide the same argument here.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display this message
+.TP
+\fB\-c\fR, \fB\-\-command\-name\fR CMD_NAME
+Connect to the Einhorn master with this cmd_name
+.TP
+\fB\-d\fR, \fB\-\-socket\-path\fR PATH
+Path to the Einhorn command socket
+.TP
+\fB\-e\fR, \fB\-\-execute\fR CMD_LINE_SEQ
+Execute this command outside of interactive mode

@@ -1,0 +1,21 @@
+Source: einhorn
+Section: net
+Priority: optional
+Maintainer: Neil Williams <neil@reddit.com>
+Build-Depends: debhelper (>= 7.0.50~), gem2deb (>= 0.6.1~)
+Standards-Version: 3.9.5
+Vcs-Git: git://github.com/reddit/einhorn.git
+Vcs-Browser: https://github.com/reddit/einhorn
+Homepage: https://github.com/stripe/einhorn
+XS-Ruby-Versions: all
+
+Package: einhorn
+Architecture: all
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter
+# rake (>= 0, development), pry (>= 0, development), minitest (< 5.0, development), mocha (~> 0.13, development), chalk-rake (>= 0, development), subprocess (>= 0, development)
+Description: language-independent shared socket manager
+ Einhorn makes it easy to run multiple instances of an application server, all
+ listening on the same port. You can also seamlessly restart your workers
+ without dropping any requests. Einhorn requires minimal application-level
+ support, making it easy to use with an existing project.

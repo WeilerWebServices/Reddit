@@ -1,0 +1,4 @@
+--color
+--require ./spec/logging_progress_bar_formatter.rb
+--format LoggingProgressBarFormatter
+

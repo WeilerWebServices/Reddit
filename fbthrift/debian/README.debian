@@ -1,0 +1,63 @@
+Setting up your build environment
+=================================
+
+To build FBThrift, you'll need to have an Ubuntu VM or machine set up,
+and you will need to have the Reddit PPA installed:
+
+add-apt-repository -y ppa:reddit/ppa && apt-get update
+
+You'll also need to install the following packages:
+
+apt-get install -y git-buildpackage build-essential devscripts
+
+
+Building this package
+=====================
+
+This package is maintained with git-buildpackage.
+
+Branches
+--------
+
+upstream
+    This is the upstream branch. Its HEAD should be the exact upstream source
+    to be built.
+
+ubuntu/trusty
+    This contains the actual packaging-ready version.
+
+patch-queue/ubuntu/trusty
+    This is a set of patches on top of upstream. It is for managing quilt
+    patches.
+
+How to build the package
+------------------------
+
+    git checkout ubuntu/trusty
+    gbp buildpackage --git-dist=trusty --git-debian-branch=ubuntu/trusty --git-upstream-tree=branch -S -sa
+
+
+How to update when upstream changes
+-----------------------------------
+
+1. Update `upstream` to the commit you want to build:
+
+    git checkout upstream
+    git merge some_commit_id
+
+2. Rebase the package branch off of upstream:
+
+    git checkout ubuntu/trusty
+    git rebase upstream
+
+2. Rebase the patch queue branch off of upstream, updating the
+   patches as necessary:
+
+    gbp pq switch
+    git rebase upstream
+
+3. Refresh the quilt patches:
+
+    gbp pq switch
+    gbp pq export
+    git commit -a 'Refresh quilt patches'

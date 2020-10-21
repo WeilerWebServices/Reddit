@@ -1,0 +1,18 @@
+Source: hvac
+Maintainer: Neil Williams <neil@reddit.com>
+Section: python
+Priority: optional
+Build-Depends: python-setuptools, python3-setuptools,
+               python-all, python3-all,
+               debhelper (>= 7)
+Standards-Version: 3.9.5
+
+Package: python-hvac
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Description: API Client for HashiCorp Vault (Python 2)
+
+Package: python3-hvac
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}
+Description: API Client for HashiCorp Vault (Python 3)

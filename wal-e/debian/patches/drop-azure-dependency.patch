@@ -1,0 +1,14 @@
+Description: Remove dependency on azure.
+Author: Ricky Ramirez <rram@reddit.com>
+Forwarded: not-needed
+Last-Update: 2016-01-19
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,5 +1,4 @@
+ gevent>=0.13.1
+ boto>=2.6.0
+-azure>=0.7.0
+ python-swiftclient>=1.8.0
+ python-keystoneclient>=0.4.2
